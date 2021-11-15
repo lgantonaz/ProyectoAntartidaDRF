@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'AntartidaAPI',
-    'AntartidaFront'
+    'AntartidaFront',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
