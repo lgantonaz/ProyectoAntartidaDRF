@@ -6,7 +6,17 @@ from AntartidaFront.models import *
 class SensorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sensor
-        fields = ('nombreSensor', 'latitud', 'longitud', 'deleted')
+        fields = ('__all__')
+
+class SensorDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sensor
+        fields = ('id', 'nombreSensor', 'latitud', 'longitud')
+
+class SensorListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sensor
+        fields = ('id', 'nombreSensor', 'latitud', 'longitud') 
 
 
 class UsuarioSerializer(serializers.ModelSerializer):

@@ -5,25 +5,30 @@ from .serializers import *
 # Utilizando los genericos de DRF crea automaticamente los controllers(llamados views en django)
 
 
-class SensorList(generics.ListCreateAPIView):
+class SensorListCreate(generics.ListCreateAPIView):
     queryset = Sensor.sensoresObjects.all() #estoy usando el custom manager que cree, que me devuelve solo los sensores que tienen deleted=false
     serializer_class = SensorSerializer
-    pass
+
 
 class UsuarioList(generics.ListCreateAPIView):
     queryset = Usuario.usuariosObjects.all() #estoy usando el custom manager que cree, que me devuelve solo los sensores que tienen deleted=false
     serializer_class = UsuarioSerializer
-    pass
+
 
 
 class RolList(generics.ListCreateAPIView):
     queryset = Rol.objects.all() #estoy usando el custom manager que cree, que me devuelve solo los sensores que tienen deleted=false
     serializer_class = RolSerializer
-    pass
 
 
 class SensorDetail(generics.RetrieveDestroyAPIView):
-    pass
+    queryset  = Sensor.objects.all()
+    serializer_class = SensorDetailSerializer
+    
+    
+class SensorList(generics.ListAPIView):
+    queryset  = Sensor.objects.all()
+    serializer_class = SensorListSerializer
 
 
 

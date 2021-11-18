@@ -20,8 +20,8 @@ class Sensor(models.Model):
 
     # idSensor=models.AutoField(primary_key= True)
     nombreSensor = models.CharField(max_length=30)
-    latitud = models.BigIntegerField
-    longitud = models.BigIntegerField
+    latitud = models.BigIntegerField(null=True, blank=True)
+    longitud = models.BigIntegerField(null=True, blank=True)
     deleted = models.BooleanField(default=False)
     objects = models.Manager()  # default model manager
     sensoresObjects = SensoresObjects()  # custom manager
