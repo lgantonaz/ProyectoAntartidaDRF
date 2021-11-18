@@ -30,6 +30,10 @@ class SensorList(generics.ListAPIView):
     queryset  = Sensor.objects.all()
     serializer_class = SensorListSerializer
 
+class SensorCreate(generics.CreateAPIView):
+    queryset  = Sensor.objects.all()
+    serializer_class = SensorCreateSerializer
+
 
 
 
