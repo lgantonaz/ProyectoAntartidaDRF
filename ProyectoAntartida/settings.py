@@ -44,17 +44,23 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'AntartidaAPI',
     'AntartidaFront',
-    'rest_framework'
+    'rest_framework',
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000",
 ]
 
 ROOT_URLCONF = 'ProyectoAntartida.urls'
@@ -129,5 +135,12 @@ STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
