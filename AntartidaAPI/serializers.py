@@ -12,6 +12,11 @@ class SensorDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sensor
         fields = ('id', 'nombreSensor', 'latitud', 'longitud')
+        
+class SensorUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sensor
+        fields = ('nombreSensor', 'latitud', 'longitud', 'deleted')
 
 class SensorListSerializer(serializers.ModelSerializer):
     class Meta:

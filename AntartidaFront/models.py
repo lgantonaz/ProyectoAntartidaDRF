@@ -121,7 +121,6 @@ class Lectura(models.Model):
 
 class Medicion(models.Model):
     
-    
     class MedicionesObjects(models.Manager):
         def get_queryset(self):
             return super().get_queryset() .filter(deleted=False)

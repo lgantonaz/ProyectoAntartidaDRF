@@ -6,26 +6,25 @@ from .serializers import *
 
 
 class SensorListCreate(generics.ListCreateAPIView):
-    queryset = Sensor.sensoresObjects.all() #estoy usando el custom manager que cree, que me devuelve solo los sensores que tienen deleted=false
+    queryset = Sensor.sensoresObjects.all() 
     serializer_class = SensorSerializer
 
-
 class UsuarioList(generics.ListCreateAPIView):
-    queryset = Usuario.usuariosObjects.all() #estoy usando el custom manager que cree, que me devuelve solo los sensores que tienen deleted=false
+    queryset = Usuario.usuariosObjects.all() 
     serializer_class = UsuarioSerializer
 
-
-
 class RolList(generics.ListCreateAPIView):
-    queryset = Rol.objects.all() #estoy usando el custom manager que cree, que me devuelve solo los sensores que tienen deleted=false
+    queryset = Rol.objects.all() 
     serializer_class = RolSerializer
-
 
 class SensorDetail(generics.RetrieveDestroyAPIView):
     queryset  = Sensor.objects.all()
     serializer_class = SensorDetailSerializer
-    
-    
+
+class SensorUpdate(generics.UpdateAPIView):
+    queryset  = Sensor.objects.all()
+    serializer_class = SensorDetailSerializer
+
 class SensorList(generics.ListAPIView):
     queryset  = Sensor.objects.all()
     serializer_class = SensorListSerializer
