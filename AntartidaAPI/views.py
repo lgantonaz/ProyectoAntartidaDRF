@@ -1,39 +1,31 @@
-from rest_framework import generics
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from AntartidaFront.models import *
 from .serializers import *
 
 # Utilizando los genericos de DRF crea automaticamente los controllers(llamados views en django)
 
 
-class SensorListCreate(generics.ListCreateAPIView):
-    queryset = Sensor.sensoresObjects.all() 
-    serializer_class = SensorSerializer
+@api_view(['GET', 'POST'])
+def sensor_view(request):
 
-class UsuarioList(generics.ListCreateAPIView):
-    queryset = Usuario.usuariosObjects.all() 
-    serializer_class = UsuarioSerializer
+    if(request.method == 'GET'):
+        sensores = Sensor.sensores_objects.all()
+        sensores_serializer = SensorSerializer(sensores, many=True)
+        return Response(sensores_serializer.data)
 
-class RolList(generics.ListCreateAPIView):
-    queryset = Rol.objects.all() 
-    serializer_class = RolSerializer
+    elif(request.method == 'POST'):
+        sensor_serializer = SensorSerializer(data=request.data)
+        if sensor_serializer.is_valid():
+            sensor_serializer.save()
+            id_sensor = sensor_serializer.data.id
+            
+        # si esta creado, que busque ese sensor y me devuelva el id
+        elif not sensor_serializer.is_valid():
+            sensores = Sensor.objects.all()
+            # buscar en todos los sensores el que coincida con el id que mando
 
-class SensorDetail(generics.RetrieveDestroyAPIView):
-    queryset  = Sensor.objects.all()
-    serializer_class = SensorDetailSerializer
-
-class SensorUpdate(generics.UpdateAPIView):
-    queryset  = Sensor.objects.all()
-    serializer_class = SensorDetailSerializer
-
-class SensorList(generics.ListAPIView):
-    queryset  = Sensor.objects.all()
-    serializer_class = SensorListSerializer
-
-class SensorCreate(generics.CreateAPIView):
-    queryset  = Sensor.objects.all()
-    serializer_class = SensorCreateSerializer
-
-
+    return Response(sensor_serializer.errors)
 
 
 """ Concrete View Classes

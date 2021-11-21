@@ -3,7 +3,7 @@ from django.db.models import query
 
 
 class Rol(models.Model):
-    nombreRol = models.CharField(max_length=30)
+    nombre_rol = models.CharField(max_length=30)
     deleted = models.BooleanField(default=False)
 
     def __str__(self):
@@ -19,12 +19,12 @@ class Sensor(models.Model):
             return super().get_queryset() .filter(deleted=False)
 
     # idSensor=models.AutoField(primary_key= True)
-    nombreSensor = models.CharField(max_length=30)
+    nombre_sensor = models.CharField(max_length=30, unique=True)
     latitud = models.BigIntegerField(null=True, blank=True)
     longitud = models.BigIntegerField(null=True, blank=True)
     deleted = models.BooleanField(default=False)
     objects = models.Manager()  # default model manager
-    sensoresObjects = SensoresObjects()  # custom manager
+    sensores_objects = SensoresObjects()  # custom manager
 
     def __str__(self):
         return self.nombreSensor
@@ -42,7 +42,7 @@ class TipoEvento(models.Model):
 class TipoMedicion(models.Model):
     # idTipoMedicion=models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    unidadDeMedida = models.CharField(max_length=30)
+    unidad_de_medida = models.CharField(max_length=30)
     deleted = models.BooleanField(default=False)
 
     def __str__(self):
@@ -55,15 +55,21 @@ class Usuario(models.Model):
         def get_queryset(self):
             return super().get_queryset() .filter(deleted=False)
         
+    class UsuariosEditores(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset() .filter(rol= 1) #editor
+        
         
     # idUsuario=models.AutoField(primary_key= True)
     nombre = models.CharField(max_length=30)
+    password = models.CharField(max_length=150, null=False, blank=False)
     apellido = models.CharField(max_length=30)
-    email = models.CharField(max_length=50)
-    rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
+    email = models.CharField(max_length=50, unique=True)
+    rol = models.ForeignKey(Rol, on_delete=models.PROTECT)
     deleted = models.BooleanField(default=False)
     objects = models.Manager()  # default model manager
-    usuariosObjects = UsuariosObjects()  # custom manager
+    usuarios_editores = UsuariosEditores()  # editores
+    usuarios_objects = UsuariosObjects()  # custom manager
 
     def __str__(self):
         return self.nombre + self.apellido + 'email: ' + self.email
@@ -77,23 +83,23 @@ class Evento(models.Model):
             return super().get_queryset() .filter(deleted=False)
     
     
-    tituloEvento = models.CharField(max_length=30)
+    titulo_evento = models.CharField(max_length=30)
     descripcion = models.CharField(max_length=300)
     usuario = models.ForeignKey(
         Usuario, null=True, blank=True, on_delete=models.CASCADE)
     sensor = models.ForeignKey(
         Sensor, null=True, blank=True, on_delete=models.CASCADE)
-    fechaEvento = models.DateTimeField(auto_now_add=False)
-    tipoEvento = models.ForeignKey(TipoEvento, on_delete=models.CASCADE)
+    fecha_evento = models.DateTimeField(auto_now_add=False)
+    tipo_evento = models.ForeignKey(TipoEvento, on_delete=models.CASCADE)
     deleted = models.BooleanField(default=False)
     objects = models.Manager()  # default model manager
-    eventosObjects = EventosObjects()  # custom manager
+    eventos_objects = EventosObjects()  # custom manager
 
     def __str__(self):
         return self.tituloEvento
 
     class Meta:
-        ordering = ('-fechaEvento',)
+        ordering = ('-fecha_evento',)
 
 
 class Lectura(models.Model):
@@ -105,18 +111,18 @@ class Lectura(models.Model):
     # idLectura=models.AutoField(primary_key=True)
     # esta es la clave foranea al sensor
     sensor = models.ForeignKey(Sensor, on_delete=models.CASCADE)
-    fechaLectura = models.DateTimeField(auto_now_add=False)
+    fecha_lectura = models.DateTimeField(auto_now_add=False)
     # este campo es por si quiere agregarle alguna informacion relacionada a la lectura (por ej. midio 200 grados porque....)
-    infoAdicional = models.CharField(max_length=300, null=True)
+    info_adicional = models.CharField(max_length=300, null=True)
     deleted = models.BooleanField(default=False)
     objects = models.Manager()  # default model manager
-    lecturasObjects = LecturasObjects()  # custom manager
+    lecturas_objects = LecturasObjects()  # custom manager
 
     def __str__(self):
         return self.sensor + self.fechaLectura
 
     class Meta:
-        ordering = ('-fechaLectura',)
+        ordering = ('-fecha_lectura',)
 
 
 class Medicion(models.Model):
@@ -129,13 +135,13 @@ class Medicion(models.Model):
     # esta es la clave foranea al sensor
     lectura = models.ForeignKey(Lectura, on_delete=models.CASCADE)
     # esta es la clave foranea a la lectura
-    tipoMedicion = models.ForeignKey(TipoMedicion, on_delete=models.PROTECT)
+    tipo_medicion = models.ForeignKey(TipoMedicion, on_delete=models.PROTECT)
     # on_delete=models.CASCADE
     # tiene un largo de 300 caracteres porque si es una imagen le vamos a pasar el path
     valor = models.CharField(max_length=300)
     deleted = models.BooleanField(default=False)
     objects = models.Manager()  # default model manager
-    medicionesObjects = MedicionesObjects()  # custom manager
+    mediciones_objects = MedicionesObjects()  # custom manager
 
     def __str__(self):
         return self.tipoMedicion + self.valor
