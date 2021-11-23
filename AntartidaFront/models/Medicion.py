@@ -9,7 +9,7 @@ class Medicion(models.Model):
     # esta es la clave foranea al sensor
     lectura=models.ForeignKey(Lectura, on_delete=models.CASCADE) 
     # esta es la clave foranea a la lectura
-    tipoMedicion=models.ForeignKey(TipoMedicion) 
+    tipo_medicion=models.ForeignKey(TipoMedicion) 
     # on_delete=models.CASCADE
     # tiene un largo de 300 caracteres porque si es una imagen le vamos a pasar el path
     valor=models.CharField(max_length=300)

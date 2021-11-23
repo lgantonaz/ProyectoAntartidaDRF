@@ -1,39 +1,36 @@
-from rest_framework import generics
+from rest_framework import response,status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from AntartidaFront.models import *
 from .serializers import *
-
+import logging
+import json
 # Utilizando los genericos de DRF crea automaticamente los controllers(llamados views en django)
 
+logger = logging.getLogger(__name__)
+@api_view(['GET', 'POST'])
+def sensor_view(request):
+    if(request.method == 'GET'):
+        sensores = Sensor.sensores_objects.all()
+        sensores_serializer = SensorSerializer(sensores, many=True)
+        return Response(sensores_serializer.data)
 
-class SensorListCreate(generics.ListCreateAPIView):
-    queryset = Sensor.sensoresObjects.all() 
-    serializer_class = SensorSerializer
-
-class UsuarioList(generics.ListCreateAPIView):
-    queryset = Usuario.usuariosObjects.all() 
-    serializer_class = UsuarioSerializer
-
-class RolList(generics.ListCreateAPIView):
-    queryset = Rol.objects.all() 
-    serializer_class = RolSerializer
-
-class SensorDetail(generics.RetrieveDestroyAPIView):
-    queryset  = Sensor.objects.all()
-    serializer_class = SensorDetailSerializer
-
-class SensorUpdate(generics.UpdateAPIView):
-    queryset  = Sensor.objects.all()
-    serializer_class = SensorDetailSerializer
-
-class SensorList(generics.ListAPIView):
-    queryset  = Sensor.objects.all()
-    serializer_class = SensorListSerializer
-
-class SensorCreate(generics.CreateAPIView):
-    queryset  = Sensor.objects.all()
-    serializer_class = SensorCreateSerializer
-
-
+    elif(request.method == 'POST'):
+        if (request.POST.get('nombre_sensor')): 
+            try:   
+                sensor = Sensor.objects.get(nombre=request.POST.get('nombre_sensor'))
+            except:
+                sensor = Sensor.objects.create(nombre=request.POST.get('nombre_sensor'))
+            lectura = Lectura.objects.create(sensor_id = sensor.id, fecha_lectura = request.POST.get('fecha_lectura'))
+            mediciones= json.loads(request.POST.get('lectura'))
+            
+            for medicion in mediciones:
+                try:
+                    tipo_medicion = TipoMedicion.objects.get(nombre=medicion['tipo'])
+                    medicion = Medicion.objects.create(lectura_id = lectura.id, tipo_medicion_id=tipo_medicion.id,valor=int(medicion['valor']))
+                except:
+                    print('OMAR ALGO ANDA MAL')
+            return Response({}, status=status.HTTP_201_CREATED)
 
 
 """ Concrete View Classes
