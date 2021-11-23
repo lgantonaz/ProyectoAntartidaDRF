@@ -19,7 +19,7 @@ class Sensor(models.Model):
             return super().get_queryset() .filter(deleted=False)
 
     # idSensor=models.AutoField(primary_key= True)
-    nombre_sensor = models.CharField(max_length=30, unique=True)
+    nombre = models.CharField(max_length=30, unique=True)
     latitud = models.BigIntegerField(null=True, blank=True)
     longitud = models.BigIntegerField(null=True, blank=True)
     deleted = models.BooleanField(default=False)

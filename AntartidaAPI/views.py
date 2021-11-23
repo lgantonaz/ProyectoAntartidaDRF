@@ -1,31 +1,36 @@
+from rest_framework import response,status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from AntartidaFront.models import *
 from .serializers import *
-
+import logging
+import json
 # Utilizando los genericos de DRF crea automaticamente los controllers(llamados views en django)
 
-
+logger = logging.getLogger(__name__)
 @api_view(['GET', 'POST'])
 def sensor_view(request):
-
     if(request.method == 'GET'):
         sensores = Sensor.sensores_objects.all()
         sensores_serializer = SensorSerializer(sensores, many=True)
         return Response(sensores_serializer.data)
 
     elif(request.method == 'POST'):
-        sensor_serializer = SensorSerializer(data=request.data)
-        if sensor_serializer.is_valid():
-            sensor_serializer.save()
-            id_sensor = sensor_serializer.data.id
+        if (request.POST.get('nombre_sensor')): 
+            try:   
+                sensor = Sensor.objects.get(nombre=request.POST.get('nombre_sensor'))
+            except:
+                sensor = Sensor.objects.create(nombre=request.POST.get('nombre_sensor'))
+            lectura = Lectura.objects.create(sensor_id = sensor.id, fecha_lectura = request.POST.get('fecha_lectura'))
+            mediciones= json.loads(request.POST.get('lectura'))
             
-        # si esta creado, que busque ese sensor y me devuelva el id
-        elif not sensor_serializer.is_valid():
-            sensores = Sensor.objects.all()
-            # buscar en todos los sensores el que coincida con el id que mando
-
-    return Response(sensor_serializer.errors)
+            for medicion in mediciones:
+                try:
+                    tipo_medicion = TipoMedicion.objects.get(nombre=medicion['tipo'])
+                    medicion = Medicion.objects.create(lectura_id = lectura.id, tipo_medicion_id=tipo_medicion.id,valor=int(medicion['valor']))
+                except:
+                    print('OMAR ALGO ANDA MAL')
+            return Response({}, status=status.HTTP_201_CREATED)
 
 
 """ Concrete View Classes
