@@ -119,7 +119,7 @@ class Lectura(models.Model):
     lecturas_objects = LecturasObjects()  # custom manager
 
     def __str__(self):
-        return self.sensor + self.fechaLectura
+        return self.sensor.nombre + self.fechaLectura
 
     class Meta:
         ordering = ('-fecha_lectura',)

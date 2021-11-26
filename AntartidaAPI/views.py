@@ -34,27 +34,26 @@ def sensor_view(request):
                     print('OMAR ALGO ANDA MAL')
             return Response({}, status=status.HTTP_201_CREATED)
 
-@api_view(['GET', 'PUT'])
-def sensor_detail_view(request,pk=None):
+@api_view(['GET', 'PUT', 'DELETE'])
+def sensor_detail_view(request,id=None):
 
     if request.method == 'GET':
-        sensor = Sensor.sensores_objects.filter(id=pk).first()
+        sensor = Sensor.sensores_objects.filter(id=id).first()
         sensor_serializer = SensorSerializer(sensor)
         return Response(sensor_serializer.data)
 
     elif request.method == 'PUT':
-        sensor = Sensor.sensores_objects.filter(pk=pk).first()
+        sensor = Sensor.sensores_objects.filter(id=id).first()
         sensor_serializer = SensorSerializer(sensor, data=request.data)
         if sensor_serializer.is_valid():
             sensor_serializer.save()
             return Response(sensor_serializer.data)
         return Response(sensor_serializer.error_messages)
 
-# def lectura_view(request):
-#     if(request.method == 'GET'):
-#         lecturas = Lectura.lecturas_objects.all()
-#         lecturas_serializer = LecturaSerializer(lecturas, many=True)
-#         return Response(lecturas_serializer.data)
+    elif request.method == 'DELETE':
+        sensor = Sensor.objects.filter(id=id).first()
+        sensor.delete()
+        return Response('Eliminado con éxito')
 
 @api_view(['GET'])
 def usuario_view(request):
@@ -63,22 +62,84 @@ def usuario_view(request):
         usuarios_serializer = UsuarioSerializer(usuarios, many=True)
         return Response(usuarios_serializer.data)
 
-@api_view(['GET', 'PUT'])
-def usuario_detail_view(request,pk=None):
+@api_view(['GET', 'PUT', 'DELETE'])
+def usuario_detail_view(request,id=None):
 
     if request.method == 'GET':
-        usuario = Usuario.objects.filter(id=pk).first()
+        usuario = Usuario.objects.filter(id=id).first()
         usuario_serializer = UsuarioSerializer(usuario)
         return Response(usuario_serializer.data)
 
     elif request.method == 'PUT':
-        usuario = Usuario.objects.filter(pk=pk).first()
+        usuario = Usuario.objects.filter(id=id).first()
         usuario_serializer = UsuarioSerializer(usuario, data=request.data)
         if usuario_serializer.is_valid():
             usuario_serializer.save()
             return Response(usuario_serializer.data)
         return Response(usuario_serializer.error_messages)
 
+    elif request.method == 'DELETE':
+        usuario = Usuario.objects.filter(id=id).first()
+        usuario.delete()
+        return Response('Eliminado con éxito')
+
+@api_view(['GET'])
+def lectura_view(request):
+    if(request.method == 'GET'):
+        lecturas = Lectura.lecturas_objects.all()
+        lecturas_serializer = LecturaSerializer(lecturas, many=True)
+        return Response(lecturas_serializer.data)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def lectura_detail_view(request,id=None):
+
+    if request.method == 'GET':
+        lectura = Lectura.objects.filter(id=id).first()
+        lectura_serializer = LecturaSerializer(lectura)
+        return Response(lectura_serializer.data)
+
+    elif request.method == 'PUT':
+        lectura = Lectura.objects.filter(id=id).first()
+        lectura_serializer = LecturaSerializer(lectura, data=request.data)
+        if lectura_serializer.is_valid():
+            lectura_serializer.save()
+            return Response(lectura_serializer.data)
+        return Response(lectura_serializer.error_messages)
+
+    elif request.method == 'DELETE':
+        lectura = Lectura.objects.filter(id=id).first()
+        lectura.delete()
+        return Response('Eliminado con éxito')
+
+
+@api_view(['GET'])
+def medicion_view(request):
+    if(request.method == 'GET'):
+        mediciones = Medicion.mediciones_objects.all()
+        mediciones_serializer = MedicionSerializer(mediciones, many=True)
+        return Response(mediciones_serializer.data)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def medicion_detail_view(request,id=None):
+
+    if request.method == 'GET':
+        medicion = Medicion.objects.filter(id=id).first()
+        medicion_serializer = MedicionSerializer(medicion)
+        return Response(medicion_serializer.data)
+
+    elif request.method == 'PUT':
+        medicion = Medicion.objects.filter(id=id).first()
+        medicion_serializer = MedicionSerializer(medicion, data=request.data)
+        if medicion_serializer.is_valid():
+            medicion_serializer.save()
+            return Response(medicion_serializer.data)
+        return Response(medicion_serializer.error_messages)
+
+
+    elif request.method == 'DELETE':
+        medicion = Medicion.objects.filter(id=id).first()
+        medicion.delete()
+        return Response('Eliminado con éxito')
 """ Concrete View Classes
 #CreateAPIView
 Used for create-only endpoints.

@@ -11,7 +11,7 @@ class SensorSerializer(serializers.ModelSerializer):
 class LecturaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lectura
-        fields = ('sensor','fecha_lectura')
+        fields = ('sensor_id','fecha_lectura')
 
 class MedicionSerializer(serializers.ModelSerializer):
     class Meta:
