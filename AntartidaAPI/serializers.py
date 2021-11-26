@@ -28,10 +28,10 @@ class MedicionSerializer(serializers.ModelSerializer):
 #         model = Sensor
 #         fields = ('nombreSensor', 'latitud', 'longitud', 'deleted')
 
-# class SensorListSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Sensor
-#         fields = ('id', 'nombreSensor', 'latitud', 'longitud') 
+class SensorListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sensor
+        fields = ('id', 'nombre', 'latitud', 'longitud') 
         
 # class SensorCreateSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -55,6 +55,13 @@ class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = ('nombre', 'apellido', 'email', 'rol')
+    
+    def valida_email(self, value):
+        email = value
+        qs = Usuario.objects.filter(email__iexact=email)
+        if qs.exists():
+            raise serializers.ValidationError('Este email ya existe')
+        return email
 
 
 class RolSerializer(serializers.ModelSerializer):

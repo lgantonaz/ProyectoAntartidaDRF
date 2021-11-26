@@ -1,4 +1,4 @@
-from rest_framework import response,status
+from rest_framework import response,status,generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from AntartidaFront.models import *
@@ -8,7 +8,9 @@ import json
 # Utilizando los genericos de DRF crea automaticamente los controllers(llamados views en django)
 
 logger = logging.getLogger(__name__)
+
 @api_view(['GET', 'POST'])
+
 def sensor_view(request):
     if(request.method == 'GET'):
         sensores = Sensor.sensores_objects.all()
@@ -32,6 +34,50 @@ def sensor_view(request):
                     print('OMAR ALGO ANDA MAL')
             return Response({}, status=status.HTTP_201_CREATED)
 
+@api_view(['GET', 'PUT'])
+def sensor_detail_view(request,pk=None):
+
+    if request.method == 'GET':
+        sensor = Sensor.sensores_objects.filter(id=pk).first()
+        sensor_serializer = SensorSerializer(sensor)
+        return Response(sensor_serializer.data)
+
+    elif request.method == 'PUT':
+        sensor = Sensor.sensores_objects.filter(pk=pk).first()
+        sensor_serializer = SensorSerializer(sensor, data=request.data)
+        if sensor_serializer.is_valid():
+            sensor_serializer.save()
+            return Response(sensor_serializer.data)
+        return Response(sensor_serializer.error_messages)
+
+# def lectura_view(request):
+#     if(request.method == 'GET'):
+#         lecturas = Lectura.lecturas_objects.all()
+#         lecturas_serializer = LecturaSerializer(lecturas, many=True)
+#         return Response(lecturas_serializer.data)
+
+@api_view(['GET'])
+def usuario_view(request):
+    if(request.method == 'GET'):
+        usuarios = Usuario.usuarios_objects.all()
+        usuarios_serializer = UsuarioSerializer(usuarios, many=True)
+        return Response(usuarios_serializer.data)
+
+@api_view(['GET', 'PUT'])
+def usuario_detail_view(request,pk=None):
+
+    if request.method == 'GET':
+        usuario = Usuario.objects.filter(id=pk).first()
+        usuario_serializer = UsuarioSerializer(usuario)
+        return Response(usuario_serializer.data)
+
+    elif request.method == 'PUT':
+        usuario = Usuario.objects.filter(pk=pk).first()
+        usuario_serializer = UsuarioSerializer(usuario, data=request.data)
+        if usuario_serializer.is_valid():
+            usuario_serializer.save()
+            return Response(usuario_serializer.data)
+        return Response(usuario_serializer.error_messages)
 
 """ Concrete View Classes
 #CreateAPIView

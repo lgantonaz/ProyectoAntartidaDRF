@@ -27,7 +27,7 @@ class Sensor(models.Model):
     sensores_objects = SensoresObjects()  # custom manager
 
     def __str__(self):
-        return self.nombreSensor
+        return self.nombre
 
 
 class TipoEvento(models.Model):

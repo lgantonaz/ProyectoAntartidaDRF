@@ -1,1 +1,0 @@
-Temperatura7;Humedad8;

@@ -23,7 +23,8 @@ for file in os.listdir(nuevo_path):
             'fecha_lectura': dateTime,
             'lectura': json.dumps(mediciones)
         }
+        print(lectura)
         r = requests.post('http://127.0.0.1:8000/api/sensor/create', data=nuevaLectura)
         shutil.move(nuevo_path+file,cargado_path)
     except:
-        print('OMAR ALGO ANDA MAL')
+        print('')
