@@ -84,9 +84,9 @@ def usuario_detail_view(request,id=None):
         return Response('Eliminado con éxito')
 
 @api_view(['GET'])
-def lectura_view(request):
+def lectura_view(request,sensor=None):
     if(request.method == 'GET'):
-        lecturas = Lectura.lecturas_objects.all()
+        lecturas = Lectura.lecturas_objects.filter(sensor=sensor)
         lecturas_serializer = LecturaSerializer(lecturas, many=True)
         return Response(lecturas_serializer.data)
 

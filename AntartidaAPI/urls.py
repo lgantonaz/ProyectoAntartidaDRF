@@ -15,7 +15,7 @@ urlpatterns = [
     
 
     #URLS DE LAS LECTURA
-    path('lectura/', lectura_view, name='list'),
+    path('lectura/<int:sensor>/', lectura_view, name='list'),
     path('lectura/detail/<int:id>/', lectura_detail_view, name='lectura_detail_view'),
     path('lectura/create', lectura_view, name='create'),
     

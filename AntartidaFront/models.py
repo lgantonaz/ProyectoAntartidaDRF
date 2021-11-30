@@ -43,10 +43,11 @@ class TipoMedicion(models.Model):
     # idTipoMedicion=models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
     unidad_de_medida = models.CharField(max_length=30)
+    color = models.CharField(max_length=50,default='rgba(255, 99, 132, 0.5)')
     deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.nombre + 'unidad:' + self.unidadDeMedida
+        return self.nombre + 'unidad:' + self.unidad_de_medida
 
 
 class Usuario(models.Model):
@@ -144,4 +145,4 @@ class Medicion(models.Model):
     mediciones_objects = MedicionesObjects()  # custom manager
 
     def __str__(self):
-        return self.tipoMedicion + self.valor
+        return self.tipo_medicion + self.valor
